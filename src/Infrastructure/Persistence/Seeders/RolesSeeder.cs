@@ -1,0 +1,37 @@
+﻿using System.Threading.Tasks;
+using Domain.Roles;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace Infrastructure.Persistence.Seeders;
+
+public static class RolesSeeder
+{
+    public static async Task SeedRolesAsync(this IApplicationBuilder app)
+    {
+        using var scope = app.ApplicationServices.CreateScope();
+        await using var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        using var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
+
+        var roles = new[]
+        {
+            "Admin",
+            "HeadManager",
+            "Manager",
+            "Master"
+        };
+
+        foreach (var role in roles)
+        {
+            if (await roleManager.RoleExistsAsync(role))
+            {
+                continue;
+            }
+            await roleManager.CreateAsync(new Role { Name = role });
+        }
+        await context.SaveChangesAsync();
+    }
+
+}
