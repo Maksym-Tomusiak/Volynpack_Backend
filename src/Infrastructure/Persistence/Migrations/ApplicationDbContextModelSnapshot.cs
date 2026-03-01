@@ -87,6 +87,31 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("AspNetRoles", (string)null);
                 });
 
+            modelBuilder.Entity("Domain.Subscriptions.Subscription", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("email");
+
+                    b.Property<Guid>("UnsubscribeToken")
+                        .HasColumnType("uuid")
+                        .HasColumnName("unsubscribe_token");
+
+                    b.HasKey("Id")
+                        .HasName("pk_subscriptions");
+
+                    b.ToTable("subscriptions", (string)null);
+                });
+
             modelBuilder.Entity("Domain.Users.User", b =>
                 {
                     b.Property<Guid>("Id")

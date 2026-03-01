@@ -1,4 +1,5 @@
-﻿using Application.Common.Interfaces.Queries;
+﻿using System.Reflection;
+using Application.Common.Interfaces.Queries;
 using Application.Common.Interfaces.Repositories;
 using Application.Common.Interfaces.Services;
 using Domain.Roles;
@@ -49,7 +50,19 @@ public static class ConfigurePersistence
 
     private static void AddRepositories(this IServiceCollection services)
     {
-        services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
-        services.AddScoped<IRefreshTokenQueries, RefreshTokenRepository>();
+        var assembly = Assembly.GetExecutingAssembly(); 
+
+        var repositoryTypes = assembly.GetTypes()
+            .Where(t => t.IsClass && !t.IsAbstract && t.Name.EndsWith("Repository"));
+
+        foreach (var implementationType in repositoryTypes)
+        {
+            var interfaces = implementationType.GetInterfaces();
+
+            foreach (var interfaceType in interfaces)
+            {
+                services.AddScoped(interfaceType, implementationType);
+            }
+        }
     }
 }

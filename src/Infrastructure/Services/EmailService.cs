@@ -13,14 +13,18 @@ public class EmailService(IOptions<EmailSettings> emailSettings) : IEmailService
 {
     private readonly EmailSettings _settings = emailSettings.Value;
 
-    public async Task SendEmail(string to, string subject, string body, bool isHtml = false)
+    public async Task SendEmail(string to, string subject, string body, string? unsubscribeUrl = null, bool isHtml = false, bool isSubscribe = false)
     {
         var message = new MimeMessage();
         message.From.Add(new MailboxAddress(_settings.SenderName, _settings.SenderEmail));
         message.To.Add(new MailboxAddress("Recipient", to));
         message.Subject = subject;
         message.Body = new TextPart(isHtml ? "html" : "plain") { Text = body };
-
+        if (isSubscribe)
+        {
+            message.Headers.Add("List-Unsubscribe", $"<{unsubscribeUrl}>");
+            message.Headers.Add("List-Unsubscribe-Post", "List-Unsubscribe=One-Click");
+        }
         try
         {
             using var client = new SmtpClient();

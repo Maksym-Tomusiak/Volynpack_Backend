@@ -2,5 +2,6 @@
 
 public interface IEmailService
 {
-    Task SendEmail(string to, string subject, string body, bool isHtml = false);
+    Task SendEmail(string to, string subject, string body, string? unsubscribeUrl = null, bool isHtml = false,
+        bool isSubscribe = false);
 }

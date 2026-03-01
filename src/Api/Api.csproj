@@ -14,7 +14,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Modules\Errors\" />
       <Folder Include="Modules\Validators\" />
     </ItemGroup>
 

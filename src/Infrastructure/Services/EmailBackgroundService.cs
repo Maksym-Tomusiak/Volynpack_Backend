@@ -26,7 +26,9 @@ public class EmailBackgroundService(
                     message.ToEmail,
                     message.Subject,
                     message.Body,
-                    message.IsHtml);
+                    message.UnsubscribeUrl,
+                    message.IsHtml,
+                    message.IsSubscribe);
             }
             catch (OperationCanceledException)
             {
