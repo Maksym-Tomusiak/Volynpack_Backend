@@ -1,4 +1,8 @@
 ﻿using System.Reflection;
+using Domain.Hashtags;
+using Domain.News;
+using Domain.NewsCategories;
+using Domain.NewsSections;
 using Domain.RefreshTokens;
 using Domain.Roles;
 using Domain.Subscriptions;
@@ -14,6 +18,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<RefreshToken> RefreshTokens { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<Subscription> Subscriptions { get; set; }
+    public DbSet<News> News { get; set; }
+    public DbSet<NewsCategory> NewsCategories { get; set; }
+    public DbSet<NewsSection> NewsSections { get; set; }
+    public DbSet<Hashtag> Hashtags { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

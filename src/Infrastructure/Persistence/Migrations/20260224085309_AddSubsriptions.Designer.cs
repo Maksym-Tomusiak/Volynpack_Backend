@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260224085309_AddSubsriptions")]
+    partial class AddSubsriptions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,145 +24,6 @@ namespace Infrastructure.Persistence.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("Domain.Hashtags.Hashtag", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("jsonb")
-                        .HasColumnName("name");
-
-                    b.HasKey("Id")
-                        .HasName("pk_hashtags");
-
-                    b.ToTable("hashtags", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.News.News", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<string>("Afterword")
-                        .IsRequired()
-                        .HasColumnType("jsonb")
-                        .HasColumnName("afterword");
-
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("category_id");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at")
-                        .HasDefaultValueSql("timezone('utc', now())");
-
-                    b.Property<string>("CtaButtonLink")
-                        .IsRequired()
-                        .HasColumnType("varchar(500)")
-                        .HasColumnName("cta_button_link");
-
-                    b.Property<string>("CtaButtonText")
-                        .IsRequired()
-                        .HasColumnType("jsonb")
-                        .HasColumnName("cta_button_text");
-
-                    b.Property<bool>("IsImportant")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false)
-                        .HasColumnName("is_important");
-
-                    b.Property<string>("PhotoUrl")
-                        .IsRequired()
-                        .HasColumnType("varchar(500)")
-                        .HasColumnName("photo_url");
-
-                    b.Property<string>("Preface")
-                        .IsRequired()
-                        .HasColumnType("jsonb")
-                        .HasColumnName("preface");
-
-                    b.Property<string>("SeoUrl")
-                        .IsRequired()
-                        .HasColumnType("jsonb")
-                        .HasColumnName("seo_url");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("jsonb")
-                        .HasColumnName("title");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_at")
-                        .HasDefaultValueSql("timezone('utc', now())");
-
-                    b.HasKey("Id")
-                        .HasName("pk_news");
-
-                    b.HasIndex("CategoryId")
-                        .HasDatabaseName("ix_news_category_id");
-
-                    b.ToTable("news", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.NewsCategories.NewsCategory", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("jsonb")
-                        .HasColumnName("title");
-
-                    b.HasKey("Id")
-                        .HasName("pk_news_categories");
-
-                    b.ToTable("news_categories", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.NewsSections.NewsSection", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("jsonb")
-                        .HasColumnName("content");
-
-                    b.Property<Guid>("NewsId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("news_id");
-
-                    b.Property<int>("Order")
-                        .HasColumnType("integer")
-                        .HasColumnName("order");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("jsonb")
-                        .HasColumnName("title");
-
-                    b.HasKey("Id")
-                        .HasName("pk_news_sections");
-
-                    b.HasIndex("NewsId")
-                        .HasDatabaseName("ix_news_sections_news_id");
-
-                    b.ToTable("news_sections", (string)null);
-                });
 
             modelBuilder.Entity("Domain.RefreshTokens.RefreshToken", b =>
                 {
@@ -332,25 +196,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("HashtagNews", b =>
-                {
-                    b.Property<Guid>("HashtagsId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("hashtags_id");
-
-                    b.Property<Guid>("NewsId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("news_id");
-
-                    b.HasKey("HashtagsId", "NewsId")
-                        .HasName("pk_news_hashtags");
-
-                    b.HasIndex("NewsId")
-                        .HasDatabaseName("ix_news_hashtags_news_id");
-
-                    b.ToTable("NewsHashtags", (string)null);
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
@@ -481,30 +326,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.News.News", b =>
-                {
-                    b.HasOne("Domain.NewsCategories.NewsCategory", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("fk_news_news_categories_category_id");
-
-                    b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("Domain.NewsSections.NewsSection", b =>
-                {
-                    b.HasOne("Domain.News.News", "News")
-                        .WithMany("Sections")
-                        .HasForeignKey("NewsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_news_sections_news_news_id");
-
-                    b.Navigation("News");
-                });
-
             modelBuilder.Entity("Domain.RefreshTokens.RefreshToken", b =>
                 {
                     b.HasOne("Domain.Users.User", "User")
@@ -515,23 +336,6 @@ namespace Infrastructure.Persistence.Migrations
                         .HasConstraintName("fk_refresh_tokens_user_user_id");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("HashtagNews", b =>
-                {
-                    b.HasOne("Domain.Hashtags.Hashtag", null)
-                        .WithMany()
-                        .HasForeignKey("HashtagsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_news_hashtags_hashtags_hashtags_id");
-
-                    b.HasOne("Domain.News.News", null)
-                        .WithMany()
-                        .HasForeignKey("NewsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_news_hashtags_news_news_id");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -589,11 +393,6 @@ namespace Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_asp_net_user_tokens_asp_net_users_user_id");
-                });
-
-            modelBuilder.Entity("Domain.News.News", b =>
-                {
-                    b.Navigation("Sections");
                 });
 #pragma warning restore 612, 618
         }

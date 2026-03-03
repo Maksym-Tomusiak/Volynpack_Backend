@@ -19,6 +19,8 @@ public class News
     public LocalizedString CtaButtonText { get; set; }
     public string CtaButtonLink { get; set; } // Зазвичай лінк один, але якщо потрібні різні - теж роби LocalizedString
     
+    public bool IsImportant { get; set; }
+    
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
     
@@ -40,6 +42,7 @@ public class News
         LocalizedString afterword, 
         LocalizedString ctaButtonText, 
         string ctaButtonLink, 
+        bool isImportant,
         NewsCategoryId categoryId)
     {
         Id = id;
@@ -50,6 +53,7 @@ public class News
         Afterword = afterword;
         CtaButtonText = ctaButtonText;
         CtaButtonLink = ctaButtonLink;
+        IsImportant = isImportant;
         CategoryId = categoryId;
         CreatedAt = DateTime.UtcNow;
         UpdatedAt = DateTime.UtcNow;
@@ -63,8 +67,9 @@ public class News
         LocalizedString afterword, 
         LocalizedString ctaButtonText, 
         string ctaButtonLink, 
+        bool isImportant,
         NewsCategoryId categoryId) =>
-        new(NewsId.New(), title, seoUrl, photoUrl, preface, afterword, ctaButtonText, ctaButtonLink, categoryId);
+        new(NewsId.New(), title, seoUrl, photoUrl, preface, afterword, ctaButtonText, ctaButtonLink, isImportant, categoryId);
 
     public void Update(
         LocalizedString title, 
@@ -74,6 +79,7 @@ public class News
         LocalizedString afterword, 
         LocalizedString ctaButtonText, 
         string ctaButtonLink, 
+        bool isImportant,
         NewsCategoryId categoryId)
     {
         Title = title;
@@ -83,6 +89,7 @@ public class News
         Afterword = afterword;
         CtaButtonText = ctaButtonText;
         CtaButtonLink = ctaButtonLink;
+        IsImportant = isImportant;
         CategoryId = categoryId;
         UpdatedAt = DateTime.UtcNow;
     }
