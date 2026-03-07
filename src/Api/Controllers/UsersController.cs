@@ -17,7 +17,7 @@ namespace Api.Controllers;
 [ApiController]
 public class UsersController(IMessageBus messageBus) : ControllerBase
 {
-    [Authorize(Roles = "Admin,HeadManager,Manager")]
+    [Authorize(Roles = "Admin")]
     [HttpGet("api/users")]
     public async Task<IResult> GetUsers(CancellationToken cancellationToken)
     {

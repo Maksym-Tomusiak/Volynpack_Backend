@@ -32,7 +32,7 @@ public class NewsCategoriesController(IMessageBus messageBus) : ControllerBase
             ex => ex.ToIResult());
     }
 
-    [Authorize(Roles = "Admin,HeadManager")]
+    [Authorize(Roles = "Admin")]
     [HttpPost("api/news-categories")]
     public async Task<IResult> Create([FromBody] NewsCategoryCreateDto request, CancellationToken cancellationToken)
     {
@@ -43,7 +43,7 @@ public class NewsCategoriesController(IMessageBus messageBus) : ControllerBase
             ex => ex.ToIResult());
     }
 
-    [Authorize(Roles = "Admin,HeadManager")]
+    [Authorize(Roles = "Admin")]
     [HttpPut("api/news-categories/{id:guid}")]
     public async Task<IResult> Update(Guid id, [FromBody] NewsCategoryUpdateDto request, CancellationToken cancellationToken)
     {
@@ -54,7 +54,7 @@ public class NewsCategoriesController(IMessageBus messageBus) : ControllerBase
             ex => ex.ToIResult());
     }
 
-    [Authorize(Roles = "Admin,HeadManager")]
+    [Authorize(Roles = "Admin")]
     [HttpDelete("api/news-categories/{id:guid}")]
     public async Task<IResult> Delete(Guid id, CancellationToken cancellationToken)
     {

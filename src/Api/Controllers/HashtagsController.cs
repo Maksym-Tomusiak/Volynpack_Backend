@@ -32,7 +32,7 @@ public class HashtagsController(IMessageBus messageBus) : ControllerBase
             ex => ex.ToIResult());
     }
 
-    [Authorize(Roles = "Admin,HeadManager,Manager")]
+    [Authorize(Roles = "Admin")]
     [HttpPost("api/hashtags")]
     public async Task<IResult> Create([FromBody] HashtagCreateDto request, CancellationToken cancellationToken)
     {
@@ -43,7 +43,7 @@ public class HashtagsController(IMessageBus messageBus) : ControllerBase
             ex => ex.ToIResult());
     }
 
-    [Authorize(Roles = "Admin,HeadManager,Manager")]
+    [Authorize(Roles = "Admin")]
     [HttpPut("api/hashtags/{id:guid}")]
     public async Task<IResult> Update(Guid id, [FromBody] HashtagUpdateDto request, CancellationToken cancellationToken)
     {
@@ -54,7 +54,7 @@ public class HashtagsController(IMessageBus messageBus) : ControllerBase
             ex => ex.ToIResult());
     }
 
-    [Authorize(Roles = "Admin,HeadManager,Manager")]
+    [Authorize(Roles = "Admin")]
     [HttpDelete("api/hashtags/{id:guid}")]
     public async Task<IResult> Delete(Guid id, CancellationToken cancellationToken)
     {

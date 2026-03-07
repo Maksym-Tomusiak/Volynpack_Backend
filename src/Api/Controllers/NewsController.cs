@@ -69,7 +69,7 @@ public class NewsController(IMessageBus messageBus) : ControllerBase
             ex => ex.ToIResult());
     }
 
-    [Authorize(Roles = "Admin,HeadManager,Manager")]
+    [Authorize(Roles = "Admin")]
     [HttpPost("api/news")]
     public async Task<IResult> CreateNews([FromForm] NewsCreateDto request, CancellationToken cancellationToken)
     {
@@ -92,7 +92,7 @@ public class NewsController(IMessageBus messageBus) : ControllerBase
             ex => ex.ToIResult());
     }
 
-    [Authorize(Roles = "Admin,HeadManager,Manager")]
+    [Authorize(Roles = "Admin")]
     [HttpPut("api/news/{id:guid}")]
     public async Task<IResult> UpdateNews(Guid id, [FromForm] NewsUpdateDto request, CancellationToken cancellationToken)
     {
@@ -116,7 +116,7 @@ public class NewsController(IMessageBus messageBus) : ControllerBase
             ex => ex.ToIResult());
     }
 
-    [Authorize(Roles = "Admin,HeadManager,Manager")]
+    [Authorize(Roles = "Admin")]
     [HttpDelete("api/news/{id:guid}")]
     public async Task<IResult> DeleteNews(Guid id, CancellationToken cancellationToken)
     {
