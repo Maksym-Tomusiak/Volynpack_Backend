@@ -27,12 +27,9 @@ public static class DeletePackageTypeCommandHandler
         {
             var packageType = existing.IfNoneUnsafe((PackageType)null!)!;
 
-            // Delete associated image files
+            // Delete associated image file
             if (!string.IsNullOrEmpty(packageType.ImageIconUrl))
                 await fileService.DeleteFileAsync(packageType.ImageIconUrl, cancellationToken);
-
-            if (!string.IsNullOrEmpty(packageType.ImageOverlayUrl))
-                await fileService.DeleteFileAsync(packageType.ImageOverlayUrl, cancellationToken);
 
             return await packageTypeRepository.Delete(packageType, cancellationToken);
         }

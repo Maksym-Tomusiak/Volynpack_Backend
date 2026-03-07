@@ -12,8 +12,7 @@ public record UpdatePackageTypeCommand(
     Guid Id,
     string TitleUk,
     string TitleEn,
-    IFormFile? ImageIcon,
-    IFormFile? ImageOverlay);
+    IFormFile? ImageIcon);
 
 public static class UpdatePackageTypeCommandHandler
 {
@@ -48,22 +47,8 @@ public static class UpdatePackageTypeCommandHandler
                 iconUrl = packageType.ImageIconUrl;
             }
 
-            string overlayUrl;
-            if (command.ImageOverlay is not null)
-            {
-                if (!string.IsNullOrEmpty(packageType.ImageOverlayUrl))
-                    await fileService.DeleteFileAsync(packageType.ImageOverlayUrl, cancellationToken);
-
-                var overlayFileName = await fileService.SaveFileAsync(command.ImageOverlay, cancellationToken);
-                overlayUrl = $"{requestPath}/{overlayFileName}";
-            }
-            else
-            {
-                overlayUrl = packageType.ImageOverlayUrl;
-            }
-
             var title = new Domain.LocalizedString(command.TitleUk, command.TitleEn);
-            packageType.Update(title, iconUrl, overlayUrl);
+            packageType.Update(title, iconUrl);
             return await packageTypeRepository.Update(packageType, cancellationToken);
         }
         catch (Exception ex)

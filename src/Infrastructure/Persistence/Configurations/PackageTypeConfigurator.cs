@@ -21,8 +21,5 @@ public class PackageTypeConfigurator : IEntityTypeConfiguration<PackageType>
 
         builder.Property(x => x.ImageIconUrl)
             .IsRequired();
-
-        builder.Property(x => x.ImageOverlayUrl)
-            .IsRequired();
     }
 }

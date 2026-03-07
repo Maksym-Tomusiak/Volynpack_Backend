@@ -3,6 +3,7 @@ using Domain.Hashtags;
 using Domain.News;
 using Domain.NewsCategories;
 using Domain.NewsSections;
+using Domain.PackageFittings;
 using Domain.PackageMaterials;
 using Domain.PackageTypes;
 using Domain.RefreshTokens;
@@ -26,6 +27,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Hashtag> Hashtags { get; set; }
     public DbSet<PackageType> PackageTypes { get; set; }
     public DbSet<PackageMaterial> PackageMaterials { get; set; }
+    public DbSet<PackageFitting> PackageFittings { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

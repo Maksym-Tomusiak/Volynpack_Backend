@@ -10,8 +10,7 @@ namespace Application.PackageTypes.Commands;
 public record CreatePackageTypeCommand(
     string TitleUk,
     string TitleEn,
-    IFormFile ImageIcon,
-    IFormFile ImageOverlay);
+    IFormFile ImageIcon);
 
 public static class CreatePackageTypeCommandHandler
 {
@@ -28,11 +27,8 @@ public static class CreatePackageTypeCommandHandler
             var iconFileName = await fileService.SaveFileAsync(command.ImageIcon, cancellationToken);
             var iconUrl = $"{requestPath}/{iconFileName}";
 
-            var overlayFileName = await fileService.SaveFileAsync(command.ImageOverlay, cancellationToken);
-            var overlayUrl = $"{requestPath}/{overlayFileName}";
-
             var title = new Domain.LocalizedString(command.TitleUk, command.TitleEn);
-            var packageType = PackageType.New(title, iconUrl, overlayUrl);
+            var packageType = PackageType.New(title, iconUrl);
             return await packageTypeRepository.Add(packageType, cancellationToken);
         }
         catch (Exception ex)

@@ -2,8 +2,6 @@ using Domain.Hashtags;
 using Domain.News;
 using Domain.NewsCategories;
 using Domain.NewsSections;
-using Domain.PackageMaterials;
-using Domain.PackageTypes;
 using Microsoft.AspNetCore.Http;
 
 namespace Api.Dtos;
@@ -46,32 +44,6 @@ public record NewsCategoryDto(Guid Id, LocalizedStringDto Title)
 
 public record NewsCategoryCreateDto(string TitleUk, string TitleEn);
 public record NewsCategoryUpdateDto(string TitleUk, string TitleEn);
-
-// ── PackageType ──────────────────────────────────────────────────────────────
-
-public record PackageTypeDto(Guid Id, LocalizedStringDto Title, string ImageIconUrl, string ImageOverlayUrl)
-{
-    public static PackageTypeDto FromDomainModel(PackageType packageType) =>
-        new(packageType.Id.Value,
-            new LocalizedStringDto(packageType.Title.Uk, packageType.Title.En),
-            packageType.ImageIconUrl,
-            packageType.ImageOverlayUrl);
-}
-
-public record PackageTypeCreateDto(string TitleUk, string TitleEn, IFormFile ImageIcon, IFormFile ImageOverlay);
-public record PackageTypeUpdateDto(string TitleUk, string TitleEn, IFormFile? ImageIcon, IFormFile? ImageOverlay);
-
-// ── PackageMaterial ──────────────────────────────────────────────────────────
-
-public record PackageMaterialDto(Guid Id, LocalizedStringDto Title)
-{
-    public static PackageMaterialDto FromDomainModel(PackageMaterial material) =>
-        new(material.Id.Value,
-            new LocalizedStringDto(material.Title.Uk, material.Title.En));
-}
-
-public record PackageMaterialCreateDto(string TitleUk, string TitleEn);
-public record PackageMaterialUpdateDto(string TitleUk, string TitleEn);
 
 // ── News ─────────────────────────────────────────────────────────────────────
 

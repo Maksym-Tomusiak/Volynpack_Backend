@@ -1,4 +1,5 @@
 using Api.Dtos;
+using Api.Dtos.PackageTypes;
 using Api.Modules.Errors;
 using Application.Common.Models;
 using Application.PackageTypes.Commands;
@@ -51,7 +52,7 @@ public class PackageTypesController(IMessageBus messageBus) : ControllerBase
     [HttpPost("api/package-types")]
     public async Task<IResult> Create([FromForm] PackageTypeCreateDto request, CancellationToken cancellationToken)
     {
-        var cmd = new CreatePackageTypeCommand(request.TitleUk, request.TitleEn, request.ImageIcon, request.ImageOverlay);
+        var cmd = new CreatePackageTypeCommand(request.TitleUk, request.TitleEn, request.ImageIcon);
         var result = await messageBus.InvokeAsync<Either<PackageTypeException, PackageType>>(cmd, cancellationToken);
         return result.Match<IResult>(
             packageType => Results.Created($"/api/package-types/{packageType.Id.Value}", PackageTypeDto.FromDomainModel(packageType)),
@@ -62,7 +63,7 @@ public class PackageTypesController(IMessageBus messageBus) : ControllerBase
     [HttpPut("api/package-types/{id:guid}")]
     public async Task<IResult> Update(Guid id, [FromForm] PackageTypeUpdateDto request, CancellationToken cancellationToken)
     {
-        var cmd = new UpdatePackageTypeCommand(id, request.TitleUk, request.TitleEn, request.ImageIcon, request.ImageOverlay);
+        var cmd = new UpdatePackageTypeCommand(id, request.TitleUk, request.TitleEn, request.ImageIcon);
         var result = await messageBus.InvokeAsync<Either<PackageTypeException, PackageType>>(cmd, cancellationToken);
         return result.Match<IResult>(
             packageType => Results.Ok(PackageTypeDto.FromDomainModel(packageType)),

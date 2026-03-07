@@ -5,23 +5,20 @@ public class PackageType
     public PackageTypeId Id { get; private set; }
     public LocalizedString Title { get; set; }
     public string ImageIconUrl { get; set; }
-    public string ImageOverlayUrl { get; set; }
 
-    private PackageType(PackageTypeId id, LocalizedString title, string imageIconUrl, string imageOverlayUrl)
+    private PackageType(PackageTypeId id, LocalizedString title, string imageIconUrl)
     {
         Id = id;
         Title = title;
         ImageIconUrl = imageIconUrl;
-        ImageOverlayUrl = imageOverlayUrl;
     }
 
-    public static PackageType New(LocalizedString title, string imageIconUrl, string imageOverlayUrl) =>
-        new(PackageTypeId.New(), title, imageIconUrl, imageOverlayUrl);
+    public static PackageType New(LocalizedString title, string imageIconUrl) =>
+        new(PackageTypeId.New(), title, imageIconUrl);
 
-    public void Update(LocalizedString title, string imageIconUrl, string imageOverlayUrl)
+    public void Update(LocalizedString title, string imageIconUrl)
     {
         Title = title;
         ImageIconUrl = imageIconUrl;
-        ImageOverlayUrl = imageOverlayUrl;
     }
 }
