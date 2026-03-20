@@ -1,9 +1,9 @@
-﻿using Application.Common.Interfaces.Queries;
+using Application.Common.Interfaces.Queries;
 using Application.Common.Interfaces.Repositories;
 using Domain.Subscriptions;
 using LanguageExt;
 
-namespace Application.Users.Commands;
+namespace Application.Subscriptions.Commands;
 
 public record UnsubscribeEmailCommand(Guid Token);
 

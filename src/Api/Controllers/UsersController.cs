@@ -1,11 +1,10 @@
-﻿using Api.Dtos;
+using Api.Dtos;
 using Api.Modules;
 using Api.Modules.Errors;
 using Application.Common.Models;
 using Application.Users.Commands;
 using Application.Users.Exceptions;
 using Application.Users.Queries;
-using Domain.Subscriptions;
 using Domain.Users;
 using LanguageExt;
 using Microsoft.AspNetCore.Authorization;
@@ -147,33 +146,4 @@ public class UsersController(IMessageBus messageBus) : ControllerBase
 
         return Results.Ok();
     }
-
-    [HttpPost("/subscribe")]
-    [Consumes("application/x-www-form-urlencoded")]
-    public async Task<IActionResult> SubscribePost(string email)
-    {
-        var cmd = new SubscribeEmailCommand(email);
-        var result = await messageBus.InvokeAsync<Either<bool, Subscription>>(cmd);
-        return result.Match<IActionResult>(
-            s => Ok(),
-            _ => Conflict());
-    }
-
-    [HttpPost("/unsubscribe/{token}")]
-    [Consumes("application/x-www-form-urlencoded")]
-    public async Task<IActionResult> UnsubscribePost(Guid token)
-    {
-        var form = await Request.ReadFormAsync();
-        if (form["List-Unsubscribe"] != "One-Click")
-        {
-            return BadRequest();
-        }
-
-        var command = new UnsubscribeEmailCommand(token);
-        var result = await messageBus.InvokeAsync<Either<bool, Subscription>>(command);
-        return result.Match<IActionResult>(
-            s => Ok(),
-            _ => BadRequest());
-    }
-
 }

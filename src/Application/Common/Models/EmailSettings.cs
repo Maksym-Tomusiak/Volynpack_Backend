@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Settings;
+namespace Application.Common.Models;
 
 public class EmailSettings
 {
@@ -7,4 +7,6 @@ public class EmailSettings
     public string? SenderEmail { get; set; }
     public string? SenderPassword { get; set; }
     public string? SenderName { get; set; }
+    public string? BaseApiUrl { get; set; }
+    public string? BaseFrontendUrl { get; set; }
 }

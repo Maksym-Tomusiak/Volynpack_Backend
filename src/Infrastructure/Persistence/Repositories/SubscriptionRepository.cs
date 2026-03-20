@@ -1,4 +1,4 @@
-﻿using Application.Common.Interfaces.Queries;
+using Application.Common.Interfaces.Queries;
 using Application.Common.Interfaces.Repositories;
 using Domain.Subscriptions;
 using LanguageExt;
@@ -26,7 +26,7 @@ public class SubscriptionRepository(ApplicationDbContext context) : ISubscriptio
         return subscription;
     }
 
-    public async Task<IReadOnlyList<Subscription>> GetAll(Guid userId, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<Subscription>> GetAll(CancellationToken cancellationToken)
     {
         return await context.Subscriptions
             .AsNoTracking()

@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Application.Common.Interfaces.Services;
+using Application.Common.Models;
 using Infrastructure.Settings;
 using MailKit.Net.Smtp;
 using MailKit.Security;
@@ -20,9 +21,11 @@ public class EmailService(IOptions<EmailSettings> emailSettings) : IEmailService
         message.To.Add(new MailboxAddress("Recipient", to));
         message.Subject = subject;
         message.Body = new TextPart(isHtml ? "html" : "plain") { Text = body };
-        if (isSubscribe)
+        if (isSubscribe && !string.IsNullOrEmpty(unsubscribeUrl))
         {
-            message.Headers.Add("List-Unsubscribe", $"<{unsubscribeUrl}>");
+            // Standard one-click unsubscribe headers (RFC 8058)
+            // Including both mailto and https for maximum compatibility
+            message.Headers.Add("List-Unsubscribe", $"<{unsubscribeUrl}>, <mailto:{_settings.SenderEmail}?subject=unsubscribe-{unsubscribeUrl.Split('/').Last()}>");
             message.Headers.Add("List-Unsubscribe-Post", "List-Unsubscribe=One-Click");
         }
         try

@@ -1,5 +1,6 @@
-﻿using Application.Common.Interfaces.Services;
+using Application.Common.Interfaces.Services;
 using Application.Common.Interfaces.Services.BackgroundEmail;
+using Application.Common.Models;
 using Hangfire;
 using Hangfire.PostgreSql;
 using Infrastructure.Settings;
@@ -56,6 +57,7 @@ public static class ConfigureServices
     {
         services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
         services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<IEmailTemplateService, EmailTemplateService>();
 
         services.AddSingleton<IBackgroundEmailQueue, BackgroundEmailQueue>();
         services.AddHostedService<EmailBackgroundService>();
