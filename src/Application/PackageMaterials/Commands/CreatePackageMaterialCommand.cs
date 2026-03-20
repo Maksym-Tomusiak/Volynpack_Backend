@@ -5,7 +5,7 @@ using LanguageExt;
 
 namespace Application.PackageMaterials.Commands;
 
-public record CreatePackageMaterialCommand(string TitleUk, string TitleEn);
+public record CreatePackageMaterialCommand(string TitleUk, string TitleEn, string DescriptionUk, string DescriptionEn);
 
 public static class CreatePackageMaterialCommandHandler
 {
@@ -17,7 +17,8 @@ public static class CreatePackageMaterialCommandHandler
         try
         {
             var title = new Domain.LocalizedString(command.TitleUk, command.TitleEn);
-            var material = PackageMaterial.New(title);
+            var description = new Domain.LocalizedString(command.DescriptionUk, command.DescriptionEn);
+            var material = PackageMaterial.New(title, description);
             return await packageMaterialRepository.Add(material, cancellationToken);
         }
         catch (Exception ex)

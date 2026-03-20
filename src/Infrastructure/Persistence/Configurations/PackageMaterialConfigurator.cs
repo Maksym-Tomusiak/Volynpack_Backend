@@ -18,5 +18,10 @@ public class PackageMaterialConfigurator : IEntityTypeConfiguration<PackageMater
             .HasConversion(new LocalizedStringConverter())
             .HasColumnType("jsonb")
             .IsRequired();
+        
+        builder.Property(x => x.Description)
+            .HasConversion(new LocalizedStringConverter())
+            .HasColumnType("jsonb")
+            .IsRequired();
     }
 }

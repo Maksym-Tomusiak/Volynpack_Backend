@@ -75,9 +75,7 @@ public class UsersController(IMessageBus messageBus) : ControllerBase
         var cmd = new UpdateUserCommand(
             id, 
             request.Username, 
-            request.Password,
-            request.Email,
-            request.RoleId);
+            request.Password);
         var res = await messageBus.InvokeAsync<Either<UserException, User>>(cmd, cancellationToken);
 
         return res.Match<IResult>(

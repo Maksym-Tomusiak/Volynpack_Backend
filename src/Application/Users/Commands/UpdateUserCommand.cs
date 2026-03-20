@@ -11,9 +11,7 @@ namespace Application.Users.Commands;
 public record UpdateUserCommand(
     Guid Id,
     string? NewUsername,
-    string? NewPassword,
-    string? NewEmail,
-    Guid RoleId);
+    string? NewPassword);
 
 public class UpdateUserCommandHandler
 {
@@ -47,24 +45,8 @@ public class UpdateUserCommandHandler
             return new UserUnauthorizedAccessException("Only admins can update other users.");
         }
         
-        var role = await roleManager.FindByIdAsync(command.RoleId.ToString());
-        if (role == null)
-        {
-            return new UserRoleNotFoundException(command.RoleId);
-        }
-        var isRoleChanged = !userManager.IsInRoleAsync(updatedUser, role!.Name).Result;
-        if (isRoleChanged)
-        {
-            var userRoles = await userManager.GetRolesAsync(updatedUser);
-            await userManager.RemoveFromRolesAsync(updatedUser, userRoles);
-            await userManager.AddToRoleAsync(updatedUser, role.Name);
-        }
-        
         if (!string.IsNullOrEmpty(command.NewUsername) && updatedUser.UserName != command.NewUsername)
             updatedUser.UserName = command.NewUsername;
-        
-        if (!string.IsNullOrEmpty(command.NewEmail) && updatedUser.Email != command.NewEmail)
-            updatedUser.Email = command.NewEmail;
         
         if (!string.IsNullOrEmpty(command.NewPassword))
         {

@@ -23,9 +23,7 @@ public record UserCreateDto(
 public record UserUpdateDto(
     Guid Id, 
     string? Username, 
-    string? Password,
-    string? Email,
-    Guid RoleId);
+    string? Password);
 
 public record LoginDto(string Username, string Password);
 

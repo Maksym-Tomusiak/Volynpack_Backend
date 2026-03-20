@@ -6,7 +6,7 @@ using LanguageExt;
 
 namespace Application.PackageMaterials.Commands;
 
-public record UpdatePackageMaterialCommand(Guid Id, string TitleUk, string TitleEn);
+public record UpdatePackageMaterialCommand(Guid Id, string TitleUk, string TitleEn, string DescriptionUk, string DescriptionEn);
 
 public static class UpdatePackageMaterialCommandHandler
 {
@@ -25,7 +25,8 @@ public static class UpdatePackageMaterialCommandHandler
         {
             var material = existing.IfNoneUnsafe((PackageMaterial)null!)!;
             var title = new Domain.LocalizedString(command.TitleUk, command.TitleEn);
-            material.Update(title);
+            var description = new Domain.LocalizedString(command.DescriptionUk, command.DescriptionEn);
+            material.Update(title, description);
             return await packageMaterialRepository.Update(material, cancellationToken);
         }
         catch (Exception ex)

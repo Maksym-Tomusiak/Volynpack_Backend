@@ -1,4 +1,5 @@
 using System.Reflection;
+using Domain.ConsultationRequest;
 using Domain.Hashtags;
 using Domain.News;
 using Domain.NewsCategories;
@@ -6,6 +7,10 @@ using Domain.NewsSections;
 using Domain.PackageFittings;
 using Domain.PackageMaterials;
 using Domain.PackageTypes;
+using Domain.ProductCategories;
+using Domain.ProductPhotos;
+using Domain.Products;
+using Domain.ProductVariants;
 using Domain.RefreshTokens;
 using Domain.Roles;
 using Domain.Subscriptions;
@@ -28,6 +33,11 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<PackageType> PackageTypes { get; set; }
     public DbSet<PackageMaterial> PackageMaterials { get; set; }
     public DbSet<PackageFitting> PackageFittings { get; set; }
+    public DbSet<ProductCategory> ProductCategories { get; set; }
+    public DbSet<Product> Products { get; set; }
+    public DbSet<ProductVariant> ProductVariants { get; set; }
+    public DbSet<ProductPhoto> ProductPhotos { get; set; }
+    public DbSet<ConsultationRequest> ConsultationRequests { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

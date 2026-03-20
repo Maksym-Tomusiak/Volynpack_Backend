@@ -2,6 +2,8 @@ using Application.Common.Interfaces.Queries;
 using Application.Common.Interfaces.Repositories;
 using Application.Common.Models;
 using Domain.PackageFittings;
+using Domain.PackageMaterials;
+using Domain.PackageTypes;
 using LanguageExt;
 using Microsoft.EntityFrameworkCore;
 
@@ -46,6 +48,17 @@ public class PackageFittingRepository(ApplicationDbContext context) : IPackageFi
             .Include(x => x.Type)
             .Include(x => x.Material)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+        return entity is null ? Option<PackageFitting>.None : Option<PackageFitting>.Some(entity);
+    }
+
+    public async Task<Option<PackageFitting>> GetByTypeAndMaterial(PackageTypeId typeId, PackageMaterialId materialId, CancellationToken cancellationToken)
+    {
+        var entity = await context.PackageFittings
+            .AsNoTracking()
+            .Include(x => x.Type)
+            .Include(x => x.Material)
+            .FirstOrDefaultAsync(x => x.TypeId == typeId && x.MaterialId == materialId, cancellationToken);
 
         return entity is null ? Option<PackageFitting>.None : Option<PackageFitting>.Some(entity);
     }

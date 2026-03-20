@@ -52,7 +52,7 @@ public class PackageMaterialsController(IMessageBus messageBus) : ControllerBase
     [HttpPost("api/package-materials")]
     public async Task<IResult> Create([FromBody] PackageMaterialCreateDto request, CancellationToken cancellationToken)
     {
-        var cmd = new CreatePackageMaterialCommand(request.TitleUk, request.TitleEn);
+        var cmd = new CreatePackageMaterialCommand(request.TitleUk, request.TitleEn, request.DescriptionUk, request.DescriptionEn);
         var result = await messageBus.InvokeAsync<Either<PackageMaterialException, PackageMaterial>>(cmd, cancellationToken);
         return result.Match<IResult>(
             material => Results.Created($"/api/package-materials/{material.Id.Value}", PackageMaterialDto.FromDomainModel(material)),
@@ -63,7 +63,7 @@ public class PackageMaterialsController(IMessageBus messageBus) : ControllerBase
     [HttpPut("api/package-materials/{id:guid}")]
     public async Task<IResult> Update(Guid id, [FromBody] PackageMaterialUpdateDto request, CancellationToken cancellationToken)
     {
-        var cmd = new UpdatePackageMaterialCommand(id, request.TitleUk, request.TitleEn);
+        var cmd = new UpdatePackageMaterialCommand(id, request.TitleUk, request.TitleEn, request.DescriptionUk, request.DescriptionEn);
         var result = await messageBus.InvokeAsync<Either<PackageMaterialException, PackageMaterial>>(cmd, cancellationToken);
         return result.Match<IResult>(
             material => Results.Ok(PackageMaterialDto.FromDomainModel(material)),

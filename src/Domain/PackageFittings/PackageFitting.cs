@@ -36,7 +36,9 @@ public class PackageFitting
         string fittingImageUrl)
     {
         TypeId = typeId;
+        Type = null;
         MaterialId = materialId;
+        Material = null;
         FittingImageUrl = fittingImageUrl;
     }
 }

@@ -46,6 +46,16 @@ public class PackageFittingsController(IMessageBus messageBus) : ControllerBase
             fitting => Results.Ok(PackageFittingDto.FromDomainModel(fitting)),
             ex => ex.ToIResult());
     }
+    
+    [HttpGet("api/package-fittings/type/{typeId:guid}/material/{materialId:guid}")]
+    public async Task<IResult> GetByTypeAndMaterial(Guid typeId, Guid materialId, CancellationToken cancellationToken)
+    {
+        var query = new GetPackageFittingByTypeAndMaterialQuery(typeId, materialId);
+        var result = await messageBus.InvokeAsync<Either<PackageFittingException, PackageFitting>>(query, cancellationToken);
+        return result.Match<IResult>(
+            fitting => Results.Ok(PackageFittingDto.FromDomainModel(fitting)),
+            ex => ex.ToIResult());
+    }
 
     [Authorize(Roles = "Admin")]
     [HttpPost("api/package-fittings")]
