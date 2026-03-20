@@ -29,7 +29,7 @@ public static class DeletePackageTypeCommandHandler
 
             // Delete associated image file
             if (!string.IsNullOrEmpty(packageType.ImageIconUrl))
-                await fileService.DeleteFileAsync(packageType.ImageIconUrl, cancellationToken);
+                await fileService.DeleteFileAsync(packageType.ImageIconUrl, "package-types", cancellationToken);
 
             return await packageTypeRepository.Delete(packageType, cancellationToken);
         }

@@ -31,15 +31,15 @@ public static class UpdatePackageTypeCommandHandler
         try
         {
             var packageType = existing.IfNoneUnsafe((PackageType)null!)!;
-            const string requestPath = "/uploads";
+            const string requestPath = "/uploads/package-types";
 
             string iconUrl;
             if (command.ImageIcon is not null)
             {
                 if (!string.IsNullOrEmpty(packageType.ImageIconUrl))
-                    await fileService.DeleteFileAsync(packageType.ImageIconUrl, cancellationToken);
+                    await fileService.DeleteFileAsync(packageType.ImageIconUrl, "package-types", cancellationToken);
 
-                var iconFileName = await fileService.SaveFileAsync(command.ImageIcon, cancellationToken);
+                var iconFileName = await fileService.SaveFileAsync(command.ImageIcon, "package-types", cancellationToken);
                 iconUrl = $"{requestPath}/{iconFileName}";
             }
             else

@@ -1,4 +1,4 @@
-﻿using Application.Common.Interfaces.Queries;
+using Application.Common.Interfaces.Queries;
 using Application.Common.Interfaces.Repositories;
 using Application.Common.Interfaces.Services;
 using Application.ProductPhotos.Exceptions;
@@ -33,8 +33,8 @@ public static class CreateProductPhotoCommandHandler
         try
         {
             // Зберігаємо фізичний файл
-            var fileName = await fileService.SaveFileAsync(command.Photo, cancellationToken);
-            const string requestPath = "/uploads"; // Або твій шлях
+            const string requestPath = "/uploads/product-photos"; // Або твій шлях
+            var fileName = await fileService.SaveFileAsync(command.Photo, "product-photos", cancellationToken);
             var photoUrl = $"{requestPath}/{fileName}";
 
             var photo = ProductPhoto.New(variantId, photoUrl, command.IsPrimary);

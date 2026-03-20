@@ -45,15 +45,15 @@ public static class UpdatePackageFittingCommandHandler
         try
         {
             var fitting = existing.IfNoneUnsafe((PackageFitting)null!)!;
-            const string requestPath = "/uploads";
+            const string requestPath = "/uploads/fittings";
 
             string imageUrl;
             if (command.FittingImage is not null)
             {
                 if (!string.IsNullOrEmpty(fitting.FittingImageUrl))
-                    await fileService.DeleteFileAsync(fitting.FittingImageUrl, cancellationToken);
+                    await fileService.DeleteFileAsync(fitting.FittingImageUrl, "fittings", cancellationToken);
 
-                var fileName = await fileService.SaveFileAsync(command.FittingImage, cancellationToken);
+                var fileName = await fileService.SaveFileAsync(command.FittingImage, "fittings", cancellationToken);
                 imageUrl = $"{requestPath}/{fileName}";
             }
             else

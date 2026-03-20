@@ -22,9 +22,9 @@ public static class CreatePackageTypeCommandHandler
     {
         try
         {
-            const string requestPath = "/uploads";
+            const string requestPath = "/uploads/package-types";
 
-            var iconFileName = await fileService.SaveFileAsync(command.ImageIcon, cancellationToken);
+            var iconFileName = await fileService.SaveFileAsync(command.ImageIcon, "package-types", cancellationToken);
             var iconUrl = $"{requestPath}/{iconFileName}";
 
             var title = new Domain.LocalizedString(command.TitleUk, command.TitleEn);

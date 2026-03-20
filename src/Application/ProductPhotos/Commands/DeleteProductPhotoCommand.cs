@@ -1,4 +1,4 @@
-﻿using Application.Common.Interfaces.Queries;
+using Application.Common.Interfaces.Queries;
 using Application.Common.Interfaces.Repositories;
 using Application.Common.Interfaces.Services;
 using Application.ProductPhotos.Exceptions;
@@ -28,7 +28,7 @@ public static class DeleteProductPhotoCommandHandler
                 {
                     // Видаляємо фізичний файл
                     if (!string.IsNullOrEmpty(photo.PhotoUrl))
-                        await fileService.DeleteFileAsync(photo.PhotoUrl, cancellationToken);
+                        await fileService.DeleteFileAsync(photo.PhotoUrl, "product-photos", cancellationToken);
 
                     // Видаляємо з БД
                     var result = await photoRepository.Delete(photo, cancellationToken);

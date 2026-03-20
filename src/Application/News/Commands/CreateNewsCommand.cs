@@ -51,8 +51,8 @@ public static class CreateNewsCommandHandler
 
         try
         {
-            var fileName = await fileService.SaveFileAsync(command.Photo, cancellationToken);
-            const string requestPath = "/uploads";
+            var fileName = await fileService.SaveFileAsync(command.Photo, "news", cancellationToken);
+            const string requestPath = "/uploads/news";
             var photoUrl = $"{requestPath}/{fileName}";
 
             var title = new Domain.LocalizedString(command.TitleUk, command.TitleEn);

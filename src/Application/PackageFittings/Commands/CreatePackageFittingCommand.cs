@@ -37,8 +37,8 @@ public static class CreatePackageFittingCommandHandler
 
         try
         {
-            const string requestPath = "/uploads";
-            var fileName = await fileService.SaveFileAsync(command.FittingImage, cancellationToken);
+            const string requestPath = "/uploads/fittings";
+            var fileName = await fileService.SaveFileAsync(command.FittingImage, "fittings", cancellationToken);
             var imageUrl = $"{requestPath}/{fileName}";
 
             var fitting = PackageFitting.New(typeId, materialId, imageUrl);

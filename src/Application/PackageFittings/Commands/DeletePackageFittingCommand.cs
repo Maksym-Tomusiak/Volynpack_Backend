@@ -29,7 +29,7 @@ public static class DeletePackageFittingCommandHandler
 
             // Delete associated image file
             if (!string.IsNullOrEmpty(fitting.FittingImageUrl))
-                await fileService.DeleteFileAsync(fitting.FittingImageUrl, cancellationToken);
+                await fileService.DeleteFileAsync(fitting.FittingImageUrl, "fittings", cancellationToken);
 
             return await packageFittingRepository.Delete(fitting, cancellationToken);
         }

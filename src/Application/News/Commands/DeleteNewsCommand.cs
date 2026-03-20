@@ -27,7 +27,7 @@ public static class DeleteNewsCommandHandler
                 {
                     // Delete the associated image file
                     if (!string.IsNullOrEmpty(news.PhotoUrl))
-                        await fileService.DeleteFileAsync(news.PhotoUrl, cancellationToken);
+                        await fileService.DeleteFileAsync(news.PhotoUrl, "news", cancellationToken);
 
                     return await newsRepository.Delete(news, cancellationToken);
                 },

@@ -66,10 +66,10 @@ public static class UpdateNewsCommandHandler
             {
                 // Delete the old image before saving the new one
                 if (!string.IsNullOrEmpty(news.PhotoUrl))
-                    await fileService.DeleteFileAsync(news.PhotoUrl, cancellationToken);
+                    await fileService.DeleteFileAsync(news.PhotoUrl, "news", cancellationToken);
 
-                var fileName = await fileService.SaveFileAsync(command.Photo, cancellationToken);
-                const string requestPath = "/uploads";
+                var fileName = await fileService.SaveFileAsync(command.Photo, "news", cancellationToken);
+                const string requestPath = "/uploads/news";
                 photoUrl = $"{requestPath}/{fileName}";
             }
             else
