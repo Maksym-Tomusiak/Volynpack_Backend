@@ -8,10 +8,12 @@ using Domain.PackageFittings;
 using LanguageExt;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Wolverine;
 
 namespace Api.Controllers;
 
+[EnableRateLimiting("CatalogPolicy")]
 [ApiController]
 public class PackageFittingsController(IMessageBus messageBus) : ControllerBase
 {

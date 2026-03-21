@@ -1,4 +1,4 @@
-﻿using Api.Dtos.ProductPhotos;
+using Api.Dtos.ProductPhotos;
 using Api.Modules.Errors;
 using Application.Common.Models;
 using Application.ProductPhotos.Commands;
@@ -8,10 +8,12 @@ using Domain.ProductPhotos;
 using LanguageExt;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Wolverine;
 
 namespace Api.Controllers;
 
+[EnableRateLimiting("CatalogPolicy")]
 [ApiController]
 public class ProductPhotoController(IMessageBus messageBus) : ControllerBase
 {

@@ -3,6 +3,7 @@ using Domain.Subscriptions;
 using LanguageExt;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Wolverine;
 
 namespace Api.Controllers;
@@ -11,6 +12,7 @@ namespace Api.Controllers;
 [Route("api/[controller]")]
 public class SubscriptionsController(IMessageBus messageBus) : ControllerBase
 {
+    [EnableRateLimiting("SensitiveActionPolicy")]
     [HttpPost("subscribe")]
     [Consumes("application/x-www-form-urlencoded")]
     public async Task<IActionResult> Subscribe([FromForm] string email)

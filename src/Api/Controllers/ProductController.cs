@@ -1,4 +1,4 @@
-﻿using Api.Dtos.Products;
+using Api.Dtos.Products;
 using Api.Modules.Errors;
 using Application.Common.Models;
 using Application.Products.Commands;
@@ -8,10 +8,12 @@ using Domain.Products;
 using LanguageExt;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Wolverine;
 
 namespace Api.Controllers;
 
+[EnableRateLimiting("CatalogPolicy")]
 [ApiController]
 public class ProductController(IMessageBus messageBus) : ControllerBase
 {

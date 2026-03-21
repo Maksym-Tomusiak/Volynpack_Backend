@@ -9,6 +9,7 @@ using Domain.Users;
 using LanguageExt;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Wolverine;
 
 namespace Api.Controllers;
@@ -94,6 +95,7 @@ public class UsersController(IMessageBus messageBus) : ControllerBase
             ex => ex.ToIResult());
     }
 
+    [EnableRateLimiting("SensitiveActionPolicy")]
     [HttpPost("api/users/login")]
     public async Task<IResult> Login(LoginDto request, CancellationToken cancellationToken)
     {

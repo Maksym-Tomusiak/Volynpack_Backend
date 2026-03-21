@@ -1,4 +1,4 @@
-﻿using Api.Dtos;
+using Api.Dtos;
 using Api.Modules.Errors;
 using Application.Common.Models;
 using Application.ConsultationRequests.Commands;
@@ -8,6 +8,7 @@ using Domain.ConsultationRequest;
 using LanguageExt;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Wolverine;
 
 namespace Api.Controllers;
@@ -44,6 +45,7 @@ public class ConsultationRequestsController(IMessageBus messageBus) : Controller
             ex => ex.ToIResult());
     }
 
+    [EnableRateLimiting("SensitiveActionPolicy")]
     [HttpPost]
     public async Task<IResult> Create([FromBody] ConsultationRequestCreateDto request, CancellationToken cancellationToken)
     {
