@@ -193,5 +193,14 @@ public class NewsRepository(ApplicationDbContext context) : INewsRepository, INe
 
         return entity is null ? Option<News>.None : Option<News>.Some(entity);
     }
+
+    public async Task<IReadOnlyList<Domain.LocalizedString>> GetAllSeoUrls(CancellationToken cancellationToken)
+    {
+        return await context.News
+            .AsNoTracking()
+            .Where(x => x.SeoUrl != null)
+            .Select(x => x.SeoUrl)
+            .ToListAsync(cancellationToken);
+    }
 }
 

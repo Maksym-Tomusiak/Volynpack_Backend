@@ -15,4 +15,5 @@ public interface IProductVariantQueries
     Task<IReadOnlyList<ProductVariant>> GetRelated(ProductId targetProductId, int limit, CancellationToken cancellationToken);
     Task<Option<ProductVariant>> GetByIdWithTracking(ProductVariantId id, CancellationToken cancellationToken);
     Task<Option<ProductVariant>> GetBySeoUrl(string seoUrl, CancellationToken cancellationToken);
+    Task<IReadOnlyList<Domain.LocalizedString>> GetAllSeoUrls(CancellationToken cancellationToken);
 }

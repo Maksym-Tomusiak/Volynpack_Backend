@@ -56,6 +56,15 @@ public class ProductVariantController(IMessageBus messageBus) : ControllerBase
             ex => ex.ToIResult());
     }
 
+    [HttpGet("api/product-variants/seo-urls")]
+    public async Task<IResult> GetAllSeoUrls(CancellationToken cancellationToken)
+    {
+        var query = new GetAllProductVariantSeoUrlsQuery();
+        var result = await messageBus.InvokeAsync<IReadOnlyList<Domain.LocalizedString>>(query, cancellationToken);
+        
+        return Results.Ok(result.Select(x => new Api.Dtos.LocalizedStringDto(x.Uk, x.En)));
+    }
+
     // Отримати всі варіації для конкретного базового товару (для кнопок вибору розміру справа від фото)
     [HttpGet("api/products/{productId:guid}/variants")]
     public async Task<IResult> GetByProductId(Guid productId, CancellationToken cancellationToken)

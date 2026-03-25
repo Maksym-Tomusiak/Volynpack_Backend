@@ -11,5 +11,6 @@ public interface INewsQueries
     Task<IReadOnlyList<Domain.News.News>> GetSimilar(NewsId newsId, int count, CancellationToken cancellationToken);
     Task<Option<Domain.News.News>> GetBySeoUrl(string seoUrl, CancellationToken cancellationToken);
     Task<Option<Domain.News.News>> GetImportant(CancellationToken cancellationToken);
+    Task<IReadOnlyList<Domain.LocalizedString>> GetAllSeoUrls(CancellationToken cancellationToken);
 }
 

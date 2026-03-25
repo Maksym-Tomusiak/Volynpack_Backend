@@ -316,4 +316,13 @@ public class ProductVariantRepository(ApplicationDbContext context) : IProductVa
                 
         return entity is null ? Option<ProductVariant>.None : Option<ProductVariant>.Some(entity);
     }
+
+    public async Task<IReadOnlyList<Domain.LocalizedString>> GetAllSeoUrls(CancellationToken cancellationToken)
+    {
+        return await context.ProductVariants
+            .AsNoTracking()
+            .Where(x => x.SeoUrl != null)
+            .Select(x => x.SeoUrl)
+            .ToListAsync(cancellationToken);
+    }
 }

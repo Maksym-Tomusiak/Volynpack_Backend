@@ -61,6 +61,15 @@ public class NewsController(IMessageBus messageBus) : ControllerBase
             ex => ex.ToIResult());
     }
 
+    [HttpGet("api/news/seo-urls")]
+    public async Task<IResult> GetAllSeoUrls(CancellationToken cancellationToken)
+    {
+        var query = new GetAllNewsSeoUrlsQuery();
+        var result = await messageBus.InvokeAsync<IReadOnlyList<Domain.LocalizedString>>(query, cancellationToken);
+        
+        return Results.Ok(result.Select(x => new Api.Dtos.LocalizedStringDto(x.Uk, x.En)));
+    }
+
     [HttpGet("api/news/{id:guid}/similar")]
     public async Task<IResult> GetSimilarNews(Guid id, [FromQuery] int count = 3, CancellationToken cancellationToken = default)
     {
