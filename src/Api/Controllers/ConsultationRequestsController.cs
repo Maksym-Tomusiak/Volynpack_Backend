@@ -1,4 +1,5 @@
 using Api.Dtos;
+using Api.Hubs;
 using Api.Modules.Errors;
 using Application.Common.Models;
 using Application.ConsultationRequests.Commands;
@@ -9,13 +10,14 @@ using LanguageExt;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.AspNetCore.SignalR;
 using Wolverine;
 
 namespace Api.Controllers;
 
 [ApiController]
 [Route("api/consultation-requests")]
-public class ConsultationRequestsController(IMessageBus messageBus) : ControllerBase
+public class ConsultationRequestsController(IMessageBus messageBus, IHubContext<NotificationHub> hubContext) : ControllerBase
 {
     [Authorize(Roles = "Admin")]
     [HttpGet]
@@ -52,9 +54,13 @@ public class ConsultationRequestsController(IMessageBus messageBus) : Controller
         var cmd = new CreateConsultationRequestCommand(request.PhoneNumber);
         var result = await messageBus.InvokeAsync<Either<ConsultationRequestException, ConsultationRequest>>(cmd, cancellationToken);
         
-        return result.Match<IResult>(
-            req => Results.Created($"/api/consultation-requests/{req.Id.Value}", ConsultationRequestDto.FromDomainModel(req)),
-            ex => ex.ToIResult());
+        return await result.MatchAsync<IResult>(
+            async req =>
+            {
+                await hubContext.Clients.All.SendAsync("ConsultationRequestCreated", ConsultationRequestDto.FromDomainModel(req), cancellationToken);
+                return Results.Created($"/api/consultation-requests/{req.Id.Value}", ConsultationRequestDto.FromDomainModel(req));
+            },
+            ex => Task.FromResult(ex.ToIResult()));
     }
 
     [Authorize(Roles = "Admin")]
@@ -64,9 +70,13 @@ public class ConsultationRequestsController(IMessageBus messageBus) : Controller
         var cmd = new UpdateConsultationRequestCommand(id, request.PhoneNumber, request.IsActive);
         var result = await messageBus.InvokeAsync<Either<ConsultationRequestException, ConsultationRequest>>(cmd, cancellationToken);
         
-        return result.Match<IResult>(
-            req => Results.Ok(ConsultationRequestDto.FromDomainModel(req)),
-            ex => ex.ToIResult());
+        return await result.MatchAsync<IResult>(
+            async req =>
+            {
+                await hubContext.Clients.All.SendAsync("ConsultationRequestUpdated", ConsultationRequestDto.FromDomainModel(req), cancellationToken);
+                return Results.Ok(ConsultationRequestDto.FromDomainModel(req));
+            },
+            ex => Task.FromResult(ex.ToIResult()));
     }
 
     [Authorize(Roles = "Admin")]

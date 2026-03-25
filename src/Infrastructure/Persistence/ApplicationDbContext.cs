@@ -1,12 +1,16 @@
 using System.Reflection;
 using Domain.ConsultationRequest;
+using Domain.DelivaryMethods;
 using Domain.Hashtags;
 using Domain.News;
 using Domain.NewsCategories;
 using Domain.NewsSections;
+using Domain.Orders;
+using Domain.OrderStatuses;
 using Domain.PackageFittings;
 using Domain.PackageMaterials;
 using Domain.PackageTypes;
+using Domain.PrintingOptions;
 using Domain.ProductCategories;
 using Domain.ProductPhotos;
 using Domain.Products;
@@ -38,6 +42,11 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<ProductVariant> ProductVariants { get; set; }
     public DbSet<ProductPhoto> ProductPhotos { get; set; }
     public DbSet<ConsultationRequest> ConsultationRequests { get; set; }
+    public DbSet<OrderStatus>  OrderStatuses { get; set; }
+    public DbSet<PrintingOption>  PrintingOptions { get; set; }
+    public DbSet<DeliveryMethod> DeliveryMethods { get; set; }
+    public DbSet<Order>  Orders { get; set; }
+    public DbSet<OrderItem> OrderItems { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

@@ -1,16 +1,11 @@
-using System.Text;
+using Api.Hubs;
 using Api.Modules;
 using Application;
+using FluentValidation;
 using Infrastructure;
-using Infrastructure.Authentication;
 using Infrastructure.Services;
-using Infrastructure.Settings;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.RateLimiting;
-using Microsoft.IdentityModel.Tokens;
 using System.Threading.RateLimiting;
 using Wolverine;
 
@@ -21,6 +16,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddControllers();
 builder.Services.AddApplication();
 builder.Services.SetupServices();
+builder.Services.AddSignalR();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpContextAccessor();
@@ -89,5 +85,6 @@ app.UseAuthorization();
 
 await app.InitializeDb();
 app.MapControllers();
+app.MapHub<NotificationHub>("/hubs/notifications");
 
 app.Run();
