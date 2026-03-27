@@ -21,10 +21,10 @@ public record DeliveryMethodDto(Guid Id, LocalizedStringDto Name)
 }
 
 // ── PrintingOption ───────────────────────────────────────────────────────────
-public record PrintingOptionDto(Guid Id, LocalizedStringDto Name)
+public record PrintingOptionDto(Guid Id, LocalizedStringDto Name, float PriceIncrease)
 {
     public static PrintingOptionDto FromDomainModel(PrintingOption option) =>
-        new(option.Id.Value, new LocalizedStringDto(option.Name.Uk, option.Name.En));
+        new(option.Id.Value, new LocalizedStringDto(option.Name.Uk, option.Name.En), option.PriceIncrease);
 }
 
 // ── OrderItem ─────────────────────────────────────────────────────────────
@@ -54,7 +54,7 @@ public record OrderItemDto(
             item.ProductVariant?.Depth,
             item.Quantity,
             item.ProductVariant?.QuantityPerPackage ?? 1,
-            item.ProductVariant?.PricePerPiece ?? 0,
+            Math.Round((item.ProductVariant?.PricePerPiece ?? 0) * (1 + (decimal)(item.PrintingOption?.PriceIncrease ?? 0) / 100), 2),
             item.PrintingOption is null ? null! : PrintingOptionDto.FromDomainModel(item.PrintingOption));
 }
 

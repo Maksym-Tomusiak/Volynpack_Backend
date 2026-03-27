@@ -1,4 +1,4 @@
-﻿using Domain.PrintingOptions;
+using Domain.PrintingOptions;
 using Infrastructure.Persistence.Converters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -14,6 +14,9 @@ public class PrintingOptionConfigurator : IEntityTypeConfiguration<PrintingOptio
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id)
             .HasConversion(x => x.Value, x => new PrintingOptionId(x))
+            .IsRequired();
+
+        builder.Property(x => x.PriceIncrease)
             .IsRequired();
 
         builder.Property(x => x.Name)

@@ -401,6 +401,10 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("jsonb")
                         .HasColumnName("name");
 
+                    b.Property<float>("PriceIncrease")
+                        .HasColumnType("real")
+                        .HasColumnName("price_increase");
+
                     b.HasKey("Id")
                         .HasName("pk_printing_options");
 
