@@ -16,7 +16,7 @@ public static class ConfigureServices
 {
     public static void AddServices(this IServiceCollection services, IConfiguration configuration)
     {
-        AddHangfire(services, configuration);
+        //AddHangfire(services, configuration);
 
         AddEmailService(services, configuration);
 
