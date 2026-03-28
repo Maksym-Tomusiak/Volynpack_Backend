@@ -16,6 +16,13 @@ public static class DbModule
         {
             await app.SeedRolesAsync();
             await app.SeedUsersAsync();
+            await app.SeedOrderStatusesAsync();
+            await app.SeedPrintingOptionsAsync();
+            await app.SeedDeliveryMethodsAsync();
+        }
+        if (bool.Parse(config["AllowTestSeeder"]!))
+        {
+            await app.SeedTestVariantsAsync();
         }
     }
 }

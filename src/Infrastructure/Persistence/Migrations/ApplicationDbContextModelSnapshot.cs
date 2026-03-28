@@ -22,6 +22,546 @@ namespace Infrastructure.Persistence.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Domain.ConsultationRequest.ConsultationRequest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at")
+                        .HasDefaultValueSql("timezone('utc', now())");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_active");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("phone_number");
+
+                    b.HasKey("Id")
+                        .HasName("pk_consultation_requests");
+
+                    b.ToTable("ConsultationRequests", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.DelivaryMethods.DeliveryMethod", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_delivery_methods");
+
+                    b.ToTable("DeliveryMethods", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Hashtags.Hashtag", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_hashtags");
+
+                    b.ToTable("hashtags", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.News.News", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Afterword")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("afterword");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("category_id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at")
+                        .HasDefaultValueSql("timezone('utc', now())");
+
+                    b.Property<string>("CtaButtonLink")
+                        .IsRequired()
+                        .HasColumnType("varchar(500)")
+                        .HasColumnName("cta_button_link");
+
+                    b.Property<string>("CtaButtonText")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("cta_button_text");
+
+                    b.Property<bool>("IsImportant")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_important");
+
+                    b.Property<string>("PhotoUrl")
+                        .IsRequired()
+                        .HasColumnType("varchar(500)")
+                        .HasColumnName("photo_url");
+
+                    b.Property<string>("Preface")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("preface");
+
+                    b.Property<string>("SeoUrl")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("seo_url");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("title");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at")
+                        .HasDefaultValueSql("timezone('utc', now())");
+
+                    b.HasKey("Id")
+                        .HasName("pk_news");
+
+                    b.HasIndex("CategoryId")
+                        .HasDatabaseName("ix_news_category_id");
+
+                    b.ToTable("news", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.NewsCategories.NewsCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("title");
+
+                    b.HasKey("Id")
+                        .HasName("pk_news_categories");
+
+                    b.ToTable("news_categories", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.NewsSections.NewsSection", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("content");
+
+                    b.Property<Guid>("NewsId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("news_id");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("integer")
+                        .HasColumnName("order");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("title");
+
+                    b.HasKey("Id")
+                        .HasName("pk_news_sections");
+
+                    b.HasIndex("NewsId")
+                        .HasDatabaseName("ix_news_sections_news_id");
+
+                    b.ToTable("news_sections", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.OrderStatuses.OrderStatus", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_order_statuses");
+
+                    b.ToTable("OrderStatuses", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Orders.Order", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Branch")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("branch");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at")
+                        .HasDefaultValueSql("timezone('utc', now())");
+
+                    b.Property<Guid>("DeliveryMethodId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("delivery_method_id");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("full_name");
+
+                    b.Property<Guid>("OrderStatusId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("order_status_id");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("phone_number");
+
+                    b.Property<string>("Town")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("town");
+
+                    b.HasKey("Id")
+                        .HasName("pk_orders");
+
+                    b.HasIndex("DeliveryMethodId")
+                        .HasDatabaseName("ix_orders_delivery_method_id");
+
+                    b.HasIndex("OrderStatusId")
+                        .HasDatabaseName("ix_orders_order_status_id");
+
+                    b.ToTable("Orders", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Orders.OrderItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("order_id");
+
+                    b.Property<Guid>("PrintingOptionId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("printing_option_id");
+
+                    b.Property<Guid>("ProductVariantId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("product_variant_id");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer")
+                        .HasColumnName("quantity");
+
+                    b.HasKey("Id")
+                        .HasName("pk_order_items");
+
+                    b.HasIndex("OrderId")
+                        .HasDatabaseName("ix_order_items_order_id");
+
+                    b.HasIndex("PrintingOptionId")
+                        .HasDatabaseName("ix_order_items_printing_option_id");
+
+                    b.HasIndex("ProductVariantId")
+                        .HasDatabaseName("ix_order_items_product_variant_id");
+
+                    b.ToTable("OrderItems", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.PackageFittings.PackageFitting", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("FittingImageUrl")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("fitting_image_url");
+
+                    b.Property<Guid>("MaterialId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("material_id");
+
+                    b.Property<Guid>("TypeId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("type_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_package_fittings");
+
+                    b.HasIndex("MaterialId")
+                        .HasDatabaseName("ix_package_fittings_material_id");
+
+                    b.HasIndex("TypeId")
+                        .HasDatabaseName("ix_package_fittings_type_id");
+
+                    b.ToTable("package_fittings", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.PackageMaterials.PackageMaterial", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("description");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("title");
+
+                    b.HasKey("Id")
+                        .HasName("pk_package_materials");
+
+                    b.ToTable("package_materials", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.PackageTypes.PackageType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("ImageIconUrl")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("image_icon_url");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("title");
+
+                    b.HasKey("Id")
+                        .HasName("pk_package_types");
+
+                    b.ToTable("package_types", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.PrintingOptions.PrintingOption", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("name");
+
+                    b.Property<float>("PriceIncrease")
+                        .HasColumnType("real")
+                        .HasColumnName("price_increase");
+
+                    b.HasKey("Id")
+                        .HasName("pk_printing_options");
+
+                    b.ToTable("PrintingOptions", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.ProductCategories.ProductCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_product_categories");
+
+                    b.ToTable("product_categories", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.ProductPhotos.ProductPhoto", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<bool>("IsPrimary")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_primary");
+
+                    b.Property<string>("PhotoUrl")
+                        .IsRequired()
+                        .HasColumnType("varchar(500)")
+                        .HasColumnName("photo_url");
+
+                    b.Property<Guid>("ProductVariantId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("product_variant_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_product_photos");
+
+                    b.HasIndex("ProductVariantId")
+                        .HasDatabaseName("ix_product_photos_product_variant_id");
+
+                    b.ToTable("product_photos", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.ProductVariants.ProductVariant", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Availability")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("availability");
+
+                    b.Property<int>("Density")
+                        .HasColumnType("integer")
+                        .HasColumnName("density");
+
+                    b.Property<decimal?>("Depth")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("numeric(10,2)")
+                        .HasColumnName("depth");
+
+                    b.Property<decimal>("Height")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("numeric(10,2)")
+                        .HasColumnName("height");
+
+                    b.Property<bool>("IsPopular")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_popular");
+
+                    b.Property<decimal>("LoadCapacity")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("numeric(10,2)")
+                        .HasColumnName("load_capacity");
+
+                    b.Property<Guid>("PackageMaterialId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("package_material_id");
+
+                    b.Property<decimal>("PricePerPiece")
+                        .HasPrecision(18, 4)
+                        .HasColumnType("numeric(18,4)")
+                        .HasColumnName("price_per_piece");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("product_id");
+
+                    b.Property<int>("QuantityPerPackage")
+                        .HasColumnType("integer")
+                        .HasColumnName("quantity_per_package");
+
+                    b.Property<string>("SeoUrl")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("seo_url");
+
+                    b.Property<decimal>("Width")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("numeric(10,2)")
+                        .HasColumnName("width");
+
+                    b.HasKey("Id")
+                        .HasName("pk_product_variants");
+
+                    b.HasIndex("PackageMaterialId")
+                        .HasDatabaseName("ix_product_variants_package_material_id");
+
+                    b.HasIndex("ProductId")
+                        .HasDatabaseName("ix_product_variants_product_id");
+
+                    b.ToTable("product_variants", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Products.Product", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("description");
+
+                    b.Property<Guid>("PackageTypeId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("package_type_id");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("title");
+
+                    b.HasKey("Id")
+                        .HasName("pk_products");
+
+                    b.HasIndex("PackageTypeId")
+                        .HasDatabaseName("ix_products_package_type_id");
+
+                    b.ToTable("products", (string)null);
+                });
+
             modelBuilder.Entity("Domain.RefreshTokens.RefreshToken", b =>
                 {
                     b.Property<Guid>("Id")
@@ -85,6 +625,31 @@ namespace Infrastructure.Persistence.Migrations
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Subscriptions.Subscription", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("email");
+
+                    b.Property<Guid>("UnsubscribeToken")
+                        .HasColumnType("uuid")
+                        .HasColumnName("unsubscribe_token");
+
+                    b.HasKey("Id")
+                        .HasName("pk_subscriptions");
+
+                    b.ToTable("subscriptions", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Users.User", b =>
@@ -166,6 +731,25 @@ namespace Infrastructure.Persistence.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("HashtagNews", b =>
+                {
+                    b.Property<Guid>("HashtagsId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("hashtags_id");
+
+                    b.Property<Guid>("NewsId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("news_id");
+
+                    b.HasKey("HashtagsId", "NewsId")
+                        .HasName("pk_news_hashtags");
+
+                    b.HasIndex("NewsId")
+                        .HasDatabaseName("ix_news_hashtags_news_id");
+
+                    b.ToTable("NewsHashtags", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -298,6 +882,223 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ProductProductCategory", b =>
+                {
+                    b.Property<Guid>("CategoriesId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("categories_id");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("product_id");
+
+                    b.HasKey("CategoriesId", "ProductId")
+                        .HasName("pk_product_category_links");
+
+                    b.HasIndex("ProductId")
+                        .HasDatabaseName("ix_product_category_links_product_id");
+
+                    b.ToTable("product_category_links", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.News.News", b =>
+                {
+                    b.HasOne("Domain.NewsCategories.NewsCategory", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_news_news_categories_category_id");
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Domain.NewsSections.NewsSection", b =>
+                {
+                    b.HasOne("Domain.News.News", "News")
+                        .WithMany("Sections")
+                        .HasForeignKey("NewsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_news_sections_news_news_id");
+
+                    b.Navigation("News");
+                });
+
+            modelBuilder.Entity("Domain.Orders.Order", b =>
+                {
+                    b.HasOne("Domain.DelivaryMethods.DeliveryMethod", "DeliveryMethod")
+                        .WithMany()
+                        .HasForeignKey("DeliveryMethodId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_orders_delivery_methods_delivery_method_id");
+
+                    b.HasOne("Domain.OrderStatuses.OrderStatus", "OrderStatus")
+                        .WithMany()
+                        .HasForeignKey("OrderStatusId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_orders_order_statuses_order_status_id");
+
+                    b.Navigation("DeliveryMethod");
+
+                    b.Navigation("OrderStatus");
+                });
+
+            modelBuilder.Entity("Domain.Orders.OrderItem", b =>
+                {
+                    b.HasOne("Domain.Orders.Order", null)
+                        .WithMany("Items")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_order_items_orders_order_id");
+
+                    b.HasOne("Domain.PrintingOptions.PrintingOption", "PrintingOption")
+                        .WithMany()
+                        .HasForeignKey("PrintingOptionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_order_items_printing_options_printing_option_id");
+
+                    b.HasOne("Domain.ProductVariants.ProductVariant", "ProductVariant")
+                        .WithMany()
+                        .HasForeignKey("ProductVariantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_order_items_product_variants_product_variant_id");
+
+                    b.Navigation("PrintingOption");
+
+                    b.Navigation("ProductVariant");
+                });
+
+            modelBuilder.Entity("Domain.PackageFittings.PackageFitting", b =>
+                {
+                    b.HasOne("Domain.PackageMaterials.PackageMaterial", "Material")
+                        .WithMany()
+                        .HasForeignKey("MaterialId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_package_fittings_package_materials_material_id");
+
+                    b.HasOne("Domain.PackageTypes.PackageType", "Type")
+                        .WithMany()
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_package_fittings_package_types_type_id");
+
+                    b.Navigation("Material");
+
+                    b.Navigation("Type");
+                });
+
+            modelBuilder.Entity("Domain.ProductPhotos.ProductPhoto", b =>
+                {
+                    b.HasOne("Domain.ProductVariants.ProductVariant", null)
+                        .WithMany("Photos")
+                        .HasForeignKey("ProductVariantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_product_photos_product_variants_product_variant_id");
+                });
+
+            modelBuilder.Entity("Domain.ProductVariants.ProductVariant", b =>
+                {
+                    b.HasOne("Domain.PackageMaterials.PackageMaterial", "Material")
+                        .WithMany()
+                        .HasForeignKey("PackageMaterialId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_product_variants_package_materials_package_material_id");
+
+                    b.HasOne("Domain.Products.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_product_variants_products_product_id");
+
+                    b.Navigation("Material");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Domain.Products.Product", b =>
+                {
+                    b.HasOne("Domain.PackageTypes.PackageType", "Type")
+                        .WithMany()
+                        .HasForeignKey("PackageTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_products_package_types_package_type_id");
+
+                    b.OwnsMany("Domain.LocalizedTextFeature", "GeneralCharacteristics", b1 =>
+                        {
+                            b1.Property<Guid>("ProductId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("integer");
+
+                            b1.Property<string>("Description")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<string>("Title")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.HasKey("ProductId", "Id");
+
+                            b1.ToTable("products");
+
+                            b1.ToJson("general_characteristics");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProductId")
+                                .HasConstraintName("fk_products_products_product_id");
+                        });
+
+                    b.OwnsMany("Domain.LocalizedTextFeature", "SuitableFor", b1 =>
+                        {
+                            b1.Property<Guid>("ProductId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("integer");
+
+                            b1.Property<string>("Description")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<string>("Title")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.HasKey("ProductId", "Id")
+                                .HasName("pk_products");
+
+                            b1.ToTable("products");
+
+                            b1.ToJson("suitable_for");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProductId")
+                                .HasConstraintName("fk_products_products_product_id");
+                        });
+
+                    b.Navigation("GeneralCharacteristics");
+
+                    b.Navigation("SuitableFor");
+
+                    b.Navigation("Type");
+                });
+
             modelBuilder.Entity("Domain.RefreshTokens.RefreshToken", b =>
                 {
                     b.HasOne("Domain.Users.User", "User")
@@ -308,6 +1109,23 @@ namespace Infrastructure.Persistence.Migrations
                         .HasConstraintName("fk_refresh_tokens_user_user_id");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("HashtagNews", b =>
+                {
+                    b.HasOne("Domain.Hashtags.Hashtag", null)
+                        .WithMany()
+                        .HasForeignKey("HashtagsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_news_hashtags_hashtags_hashtags_id");
+
+                    b.HasOne("Domain.News.News", null)
+                        .WithMany()
+                        .HasForeignKey("NewsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_news_hashtags_news_news_id");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -365,6 +1183,38 @@ namespace Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_asp_net_user_tokens_asp_net_users_user_id");
+                });
+
+            modelBuilder.Entity("ProductProductCategory", b =>
+                {
+                    b.HasOne("Domain.ProductCategories.ProductCategory", null)
+                        .WithMany()
+                        .HasForeignKey("CategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_product_category_links_product_categories_categories_id");
+
+                    b.HasOne("Domain.Products.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_product_category_links_products_product_id");
+                });
+
+            modelBuilder.Entity("Domain.News.News", b =>
+                {
+                    b.Navigation("Sections");
+                });
+
+            modelBuilder.Entity("Domain.Orders.Order", b =>
+                {
+                    b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("Domain.ProductVariants.ProductVariant", b =>
+                {
+                    b.Navigation("Photos");
                 });
 #pragma warning restore 612, 618
         }

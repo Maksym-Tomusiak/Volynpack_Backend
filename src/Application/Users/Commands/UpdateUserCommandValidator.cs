@@ -9,7 +9,5 @@ public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
         RuleFor(x => x.Id).NotEmpty();
         RuleFor(x => x.NewPassword).MinimumLength(5).MaximumLength(255);
         RuleFor(x => x.NewUsername).MinimumLength(5).MaximumLength(255);
-        RuleFor(x => x.NewEmail).EmailAddress().MaximumLength(255);
-        RuleFor(x => x.RoleId).NotEmpty();
     }
 }
