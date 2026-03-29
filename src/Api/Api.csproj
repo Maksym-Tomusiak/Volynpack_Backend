@@ -18,6 +18,12 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Content Include="EmailTemplates\*.html">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
        <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
     </ItemGroup>
 
