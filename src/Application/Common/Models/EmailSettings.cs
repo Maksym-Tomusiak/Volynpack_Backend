@@ -9,4 +9,5 @@ public class EmailSettings
     public string? SenderName { get; set; }
     public string? BaseApiUrl { get; set; }
     public string? BaseFrontendUrl { get; set; }
+    public string? MailApiKey { get; set; }
 }

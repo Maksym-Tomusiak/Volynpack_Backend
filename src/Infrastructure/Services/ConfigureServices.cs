@@ -56,7 +56,7 @@ public static class ConfigureServices
     private static void AddEmailService(IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
-        services.AddScoped<IEmailService, EmailService>();
+        services.AddTransient<IEmailService, EmailService>();
         services.AddScoped<IEmailTemplateService, EmailTemplateService>();
 
         services.AddSingleton<IBackgroundEmailQueue, BackgroundEmailQueue>();

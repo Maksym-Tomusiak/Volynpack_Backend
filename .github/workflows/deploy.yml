@@ -62,6 +62,7 @@ jobs:
             echo "EMAIL_SENDER_NAME=${{ secrets.EMAIL_SENDER_NAME }}" >> .env
             echo "EMAIL_SENDER_EMAIL=${{ secrets.EMAIL_SENDER_EMAIL }}" >> .env
             echo "EMAIL_SENDER_PASSWORD=${{ secrets.EMAIL_SENDER_PASSWORD }}" >> .env
+            echo "EMAIL_MAILERSEND_API_KEY=${{ secrets.EMAIL_MAILERSEND_API_KEY }}" >> .env
             # ---------------------
 
             docker-compose pull backend

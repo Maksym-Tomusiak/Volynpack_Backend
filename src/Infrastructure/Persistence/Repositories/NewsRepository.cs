@@ -81,6 +81,7 @@ public class NewsRepository(ApplicationDbContext context) : INewsRepository, INe
     {
         var query = context.News
             .AsNoTracking()
+            .AsSplitQuery() // <-- ADD THIS LINE
             .Include(x => x.Category)
             .Include(x => x.Hashtags)
             .AsQueryable();
