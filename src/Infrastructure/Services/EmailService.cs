@@ -1,4 +1,7 @@
 using System;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Application.Common.Interfaces.Services;
 using Application.Common.Models;
@@ -7,38 +10,61 @@ using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
+using Resend;
 
 namespace Infrastructure.Services;
 
-public class EmailService(IOptions<EmailSettings> emailSettings) : IEmailService
+public class EmailService : IEmailService
 {
-    private readonly EmailSettings _settings = emailSettings.Value;
+    private readonly EmailSettings _settings;
+    private readonly IResend _resend;
+
+    public EmailService(IOptions<EmailSettings> emailSettings)
+    {
+        _settings = emailSettings.Value;
+        
+        // Initialize the Resend client with your API key
+        _resend = ResendClient.Create(_settings.MailApiKey);
+    }
 
     public async Task SendEmail(string to, string subject, string body, string? unsubscribeUrl = null, bool isHtml = false, bool isSubscribe = false)
     {
-        var message = new MimeMessage();
-        message.From.Add(new MailboxAddress(_settings.SenderName, _settings.SenderEmail));
-        message.To.Add(new MailboxAddress("Recipient", to));
-        message.Subject = subject;
-        message.Body = new TextPart(isHtml ? "html" : "plain") { Text = body };
+        // Use Resend's built-in message model
+        var message = new Resend.EmailMessage
+        {
+            From = $"{_settings.SenderName} <{_settings.SenderEmail}>", // e.g., "Volynpack <info@volynpack.com>"
+            To = to,
+            Subject = subject,
+        };
+
+        // Assign the body based on the isHtml flag
+        if (isHtml)
+        {
+            message.HtmlBody = body;
+        }
+        else
+        {
+            message.TextBody = body;
+        }
+
+        // Bonus: Resend supports custom headers on the free tier! 
+        // We can safely add the standard 1-click unsubscribe headers back.
         if (isSubscribe && !string.IsNullOrEmpty(unsubscribeUrl))
         {
-            // Standard one-click unsubscribe headers (RFC 8058)
-            // Including both mailto and https for maximum compatibility
-            message.Headers.Add("List-Unsubscribe", $"<{unsubscribeUrl}>, <mailto:{_settings.SenderEmail}?subject=unsubscribe-{unsubscribeUrl.Split('/').Last()}>");
-            message.Headers.Add("List-Unsubscribe-Post", "List-Unsubscribe=One-Click");
+            message.Headers = new Dictionary<string, string>
+            {
+                { "List-Unsubscribe", $"<{unsubscribeUrl}>" },
+                { "List-Unsubscribe-Post", "List-Unsubscribe=One-Click" }
+            };
         }
+
         try
         {
-            using var client = new SmtpClient();
-            await client.ConnectAsync(_settings.SmtpHost, _settings.SmtpPort, SecureSocketOptions.SslOnConnect);
-            await client.AuthenticateAsync(_settings.SenderEmail, _settings.SenderPassword);
-            await client.SendAsync(message);
-            await client.DisconnectAsync(true);
+           await _resend.EmailSendAsync(message);
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Failed to send email: {ex.Message}");
+            Console.WriteLine($"Resend Exception: {ex.Message}");
         }
     }
 }
