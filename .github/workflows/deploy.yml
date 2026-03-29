@@ -65,7 +65,8 @@ jobs:
             echo "EMAIL_MAIL_API_KEY=${{ secrets.EMAIL_MAIL_API_KEY }}" >> .env
             # ---------------------
 
-            docker compose pull backend
-            docker compose up -d --force-recreate --no-deps backend
-            # Clean up old images to save space
+            docker-compose pull backend
+            docker-compose up -d --force-recreate --no-deps backend
+
+            # Clean up
             docker image prune -f
